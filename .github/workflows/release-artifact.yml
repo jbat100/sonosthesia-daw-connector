@@ -1,0 +1,19 @@
+name: Package and Upload M4L
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Package Files
+      run: |
+        zip -r m4l.zip m4l/
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: m4l
+        path: m4l.zip
