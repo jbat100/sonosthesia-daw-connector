@@ -10,7 +10,7 @@ Install the `sonosthesia-daw-connector` package globally
 npm install -g sonosthesia-daw-connector
 ```
 
-Adapt a configuration file (examples available in the `/config` folder). You can then run `sonosthesia-daw-connector` from the command line with the configuration file as argument (names in cwd, relative or absote paths are supported)
+Adapt a [configuration file](https://github.com/jbat100/sonosthesia-daw-connector#configuration). You can then run `sonosthesia-daw-connector` from the command line with the configuration file as argument (names in cwd, relative or absote paths are supported)
 
 ```
 sonosthesia-daw-connector -config=./midi.json
@@ -19,6 +19,8 @@ sonosthesia-daw-connector -config=./midi.json
 ## Configuration
 
 Configuration is done via a JSON file.
+
+### Simple MIDI relay configuration
 
 ```
 {
