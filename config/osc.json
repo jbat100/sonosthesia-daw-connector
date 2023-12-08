@@ -1,0 +1,10 @@
+{
+    "server" : {
+        "port" : 80,
+        "logLevel" : 2
+    },
+    "oscSource" : {
+        "port" : 7006,
+        "logLovel" : 2
+    }
+}

@@ -4,7 +4,7 @@ const nodeprocess = require('node:process');
 const parser = require('args-parser');
 
 const { serverFromConfig } = require('./wss/wss');
-const { liveServerFromConfig } = require('./live/live');
+const { oscServerFromConfig } = require('./osc/osc');
 const { midiSinkFromConfig, midiSourcesFromConfig } = require('./midi/raw-midi');
 const { getConfig, assertType } = require('./config/config');
 
@@ -22,14 +22,14 @@ function run() {
   const config = getConfig(args.config ?? 'midi');
 
   assertType('server', config, 'object', true);
-  assertType('liveSource', config, 'object');
+  assertType('oscSource', config, 'object');
   assertType('midiSource', config, 'object');
   assertType('midiSink', config, 'object');
   
   context.wss = serverFromConfig(config.server);
 
-  if (config.liveSource) {
-    context.liveServer = liveServerFromConfig(config.liveSource, context.wss);
+  if (config.oscSource) {
+    context.oscServer = oscServerFromConfig(config.oscSource, context.wss);
   }
 
   if (config.midiSink) {

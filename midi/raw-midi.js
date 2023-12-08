@@ -31,7 +31,7 @@ class RawMIDISource {
 
         this._cumulativeTime += deltaTime;
 
-        if (this._logLevel) {
+        if (this._logLevel > 0) {
             const messageHex = message.map(byte => byte.toString(16)).join(' ');
             console.log(`RawMIDISource l: ${message.length} m: ${messageHex} d: ${deltaTime}`);
         }
