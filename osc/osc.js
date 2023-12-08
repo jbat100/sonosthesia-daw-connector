@@ -232,7 +232,7 @@ class OSCToWSSBuffer {
 
 }
 
-class LiveServerLogger {
+class OSCServerLogger {
 
     constructor (server, level) {
         this._server = server;
@@ -251,7 +251,7 @@ class LiveServerLogger {
 } 
 
 
-class LiveOSCServer {
+class OSCServer {
 
     constructor(port) {
         this._udpPort = new osc.UDPPort({
@@ -278,13 +278,13 @@ class LiveOSCServer {
     }
 }
 
-function liveServerFromConfig(config, wss) {
+function oscServerFromConfig(config, wss) {
 
     assertType('port', config, 'number', true);
     assertType('logLevel', config, 'number');
     assertType('buffer', config, 'number');
 
-    const liveServer = new LiveOSCServer(config.port); 
+    const liveServer = new OSCServer(config.port); 
 
     if (config.buffer) {
         const source = new BufferedOSCToWSSSource(liveServer, wss, new OSCPacker(), config.buffer);
@@ -300,17 +300,17 @@ function liveServerFromConfig(config, wss) {
     }
     
     if (config.logLevel) {
-        const logger = new LiveServerLogger(liveServer, config.logLevel);
+        const logger = new OSCServerLogger(liveServer, config.logLevel);
     }
 
     return liveServer;
 }
 
 module.exports = {
-    liveServerFromConfig,
-    LiveOSCServer,
+    oscServerFromConfig,
+    OSCServer,
     OSCPacker,
-    LiveServerLogger,
+    OSCServerLogger,
     SimpleOSCToWSSSource,
     BufferedOSCToWSSSource
 }

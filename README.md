@@ -55,16 +55,27 @@ Multiple ports can be specified and clients can specify sink or source ports the
 
 The websocket server is the connection point for applications. It allows bi-lateral communication using a protocol based on [messagepack](https://msgpack.org/index.html) which is extremely efficient and portable. Each message has an OSC style address `string` and a `byte[]` payload which can be decoded according to the expected type.
 
-A client implementations currently only exists for [Unity](https://github.com/jbat100/sonosthesia-unity-packages/tree/main/packages/com.sonosthesia.pack) but is relatively straightforward to implement on any platform which supports websockets and messagepack.
-
-## MIDI Sources
+## MIDI Sources and Sinks
 
 A midi source listens to a MIDI input port on the local machine and relays the messages to websocket clients.
 
-
-## MIDI Sinks
-
 A midi sink listens to requests from websocket clients to send MIDI messages to a MIDI output port on the local machine.
+
+## OSC Sources and Sinks
+
+An OSC source listens to a OSC port on the local machine and relays the messages to websocket clients. OSC sources are used to relay messages sent by the DAW (or DAW extensions/plugins). 
+
+An OSC sink listens to requests from websocket clients to send OSC messages to an OSC port on the local machine. OSC sinks are used to relay messages to the DAW (or DAW extensions and plugins). 
+
+When relaying OSC messages to and from websocket clients, specific messagepack data structures are used for each message type for efficiency.
+
+## Websocket Client Implementations
+
+A client implementation currently only exists for [Unity](https://github.com/jbat100/sonosthesia-unity-packages/tree/main/packages/com.sonosthesia.pack) but is relatively straightforward to implement on any platform which supports websockets and messagepack.
+
+## M4L Devices
+
+A number of [M4L devices](https://github.com/jbat100/sonosthesia-daw-connector/tree/main/m4l) are available to send Host, MIDI and Audio analysis information to OSC sources and to recieve requests from OSC sinks. 
 
 
 
