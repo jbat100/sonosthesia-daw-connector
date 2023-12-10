@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const easymidi = require('easymidi');
+const prettyjson = require('prettyjson');
 const { AggregateException } = require('../utils/utils');
 
 /**
@@ -27,11 +28,12 @@ class MIDIOutputs {
                     console.warn(`Failed to open MIDI output port: ${name}`);
                 }
             } catch (error) {
-                console.error(`Failed to open MIDI outout port: ${name}, error: ${error}, reason: ${error.message}`);
+                console.error(`Failed to open MIDI outout port: ${name}, error: ${error}`);
                 errors.push(error);
             }
         }
         if (errors.length > 0) {
+            console.log(`Available MIDI output ports:\n${prettyjson.render(easymidi.getOutputs())}`);
             throw new AggregateException(errors);
         }
     }

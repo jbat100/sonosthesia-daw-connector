@@ -18,27 +18,34 @@ let context = {}
 
 function run() {
 
-  const args = parser(process.argv);
-  const config = getConfig(args.config ?? 'midi');
-
-  assertType('server', config, 'object', true);
-  assertType('oscSource', config, 'object');
-  assertType('midiSource', config, 'object');
-  assertType('midiSink', config, 'object');
+  try {
+    const args = parser(process.argv);
+    const config = getConfig(args.config ?? 'midi');
   
-  context.wss = serverFromConfig(config.server);
+    assertType('server', config, 'object', true);
+    assertType('oscSource', config, 'object');
+    assertType('midiSource', config, 'object');
+    assertType('midiSink', config, 'object');
+    
+    const strict = args.strict;
 
-  if (config.oscSource) {
-    context.oscServer = oscServerFromConfig(config.oscSource, context.wss);
-  }
-
-  if (config.midiSink) {
-    context.midiSink = midiSinkFromConfig(config.midiSink, context.wss);
-  }
+    context.wss = serverFromConfig(config.server);
   
-  if (config.midiSource) {
-    context.midiSources = midiSourcesFromConfig(config.midiSource, context.wss);
+    if (config.oscSource) {
+      context.oscServer = oscServerFromConfig(config.oscSource, context.wss);
+    }
+  
+    if (config.midiSink) {
+      context.midiSink = midiSinkFromConfig(config.midiSink, context.wss, strict);
+    }
+    
+    if (config.midiSource) {
+      context.midiSources = midiSourcesFromConfig(config.midiSource, context.wss, strict);
+    }
+  } catch (e) {
+    console.error(e);
   }
+
   
 }
 
