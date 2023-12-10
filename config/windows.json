@@ -1,0 +1,20 @@
+{
+    "server" : {
+        "port" : 80,
+        "logLevel" : 2
+    },
+    "midiSink" : {
+        "ports" : [
+            "Unity MIDI Port",
+            "Blablabla"
+        ],
+        "logLevel" : 2
+    },
+    "midiSource" : {
+        "ports" : [
+            "Unity MIDI Port",
+            "MPK mini 3"
+        ],
+        "logLevel" : 2
+    }
+}

@@ -16,6 +16,12 @@ Adapt a [configuration file](https://github.com/jbat100/sonosthesia-daw-connecto
 sonosthesia-daw-connector -config=./midi.json
 ```
 
+By default errors accessing ports are reported but do not abort. You can add `strict` if this is your desired behaviour.
+
+```
+sonosthesia-daw-connector -config=./midi.json strict
+```
+
 ## Configuration
 
 Configuration is done via a JSON file.
@@ -61,6 +67,8 @@ A midi source listens to a MIDI input port on the local machine and relays the m
 
 A midi sink listens to requests from websocket clients to send MIDI messages to a MIDI output port on the local machine.
 
+Depending on the type of MIDI port, errors may be encountered because other processes (such as DAWs) have appropriated the ports to themselves. If you want to disable a MIDI port in Live you may do so in the MIDI settings. You can create loopback virtual MIDI ports by using apps like [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html) on Windows and the [IAC driver](https://support.apple.com/en-sg/guide/audio-midi-setup/ams1013/mac) on macOS (see this Live [article](https://help.ableton.com/hc/en-us/articles/209774225-Setting-up-a-virtual-MIDI-bus)).
+
 ## OSC Sources and Sinks
 
 An OSC source listens to a OSC port on the local machine and relays the messages to websocket clients. OSC sources are used to relay messages sent by the DAW (or DAW extensions/plugins). 
@@ -75,7 +83,7 @@ A client implementation currently only exists for [Unity](https://github.com/jba
 
 ## M4L Devices
 
-A number of [M4L devices](https://github.com/jbat100/sonosthesia-daw-connector/tree/main/m4l) are available to send Host, MIDI and Audio analysis information to OSC sources and to recieve requests from OSC sinks. 
+A number of [M4L devices](https://github.com/jbat100/sonosthesia-daw-connector/tree/main/m4l) are available to send Host, MIDI and Audio analysis information to OSC sources and to recieve requests from OSC sinks. This feature is still in early develoment.
 
 
 

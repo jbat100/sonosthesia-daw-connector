@@ -139,28 +139,55 @@ class RawMIDISink {
     }
 }
 
-function midiSinkFromConfig(config, wss) {
+function midiSinkFromConfig(config, wss, strict) {
 
     assertArrayType('ports', config, 'string', true);
     assertType('logLevel', config, 'number');
 
-    const outputs = new MIDIOutputs(config.ports);
-    const midiSink = new RawMIDISink(outputs, wss);
+    let midiSink = null;
+
+    try {
+        const outputs = new MIDIOutputs(config.ports);
+        midiSink = new RawMIDISink(outputs, wss);
+    } catch (e) {
+        if (strict) {
+            throw e;
+        }
+    }
 
     return midiSink;
 }
 
-function midiSourcesFromConfig(config, wss) {
+function midiSourcesFromConfig(config, wss, strict) {
 
     assertArrayType('ports', config, 'string', true);
     assertType('logLevel', config, 'number');
 
     const sources = [];
+    const errors = [];
 
     for (let midiInputName of config.ports) {
-        const midiInput = new easymidi.Input(midiInputName); 
-        const source = new RawMIDISource(midiInput, wss, config.logLevel);
-        sources.push(source);
+        try {
+            const midiInput = new easymidi.Input(midiInputName); 
+            const source = new RawMIDISource(midiInput, wss, config.logLevel);
+            // Check if the output port was successfully opened
+            if (midiInput) {
+                console.log(`Opened MIDI input port: ${midiInputName}`);
+                sources.push(source);
+            } else {
+                console.warn(`Failed to open MIDI input port: ${midiInputName}`);
+            }
+        } catch (error) {
+            console.error(`Failed to open MIDI input port: ${midiInputName}, error: ${error}`);
+            errors.push(error);
+        }
+    }
+
+    if (errors.length > 0) {
+        console.log(`Available MIDI input ports:\n${prettyjson.render(easymidi.getInputs())}`);
+        if (strict) {
+            throw new AggregateException(errors);
+        }
     }
 
     return sources;
