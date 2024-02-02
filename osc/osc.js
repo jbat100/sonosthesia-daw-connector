@@ -2,6 +2,7 @@ const _ = require('lodash');
 const osc = require('osc');
 const msgpack = require('@msgpack/msgpack');
 const EventEmitter = require('eventemitter3');
+const prettyjson = require('prettyjson');
 const { assertType } = require('../config/config');
 
 // look into using https://github.com/ideoforms/AbletonOSC  (more generally python scripting)
@@ -255,7 +256,7 @@ class OSCServerLogger {
         }
         if (level === 2) {
             this._server.on('message', message => {
-                console.log(`Incoming live osc : ${message}`);
+                console.log(`Incoming live osc : ${prettyjson.render(message)}`);
             });
         }
     }
