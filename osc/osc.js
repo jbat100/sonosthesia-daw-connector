@@ -3,6 +3,7 @@ const osc = require('osc');
 const msgpack = require('@msgpack/msgpack');
 const EventEmitter = require('eventemitter3');
 const prettyjson = require('prettyjson');
+const chalk = require('chalk');
 const { assertType } = require('../config/config');
 
 // look into using https://github.com/ideoforms/AbletonOSC  (more generally python scripting)
@@ -111,8 +112,8 @@ class OSCPacker {
                 b1 : args[1]?.value,
                 b2 : args[2]?.value,
                 b3 : args[3]?.value,
-                b3 : args[4]?.value,
-                b3 : args[5]?.value
+                b4 : args[4]?.value,
+                b5 : args[5]?.value
             };
         };
     }
@@ -126,12 +127,17 @@ class SimpleOSCToWSSSource {
         this._wss = wss;
         this._packer = packer;
         this._live.on('message', message => {
-            const packedContent = this._packer.pack(message.address, message.args);
-            const envelope = msgpack.encode({
-                address: message.address,
-                content: msgpack.encode(packedContent)
-            });
-            this._wss.broadcast(envelope);
+            try {
+                const packedContent = this._packer.pack(message.address, message.args);
+                console.log(chalk.green(`OSC source broadcasting address ${message.address}`));
+                const envelope = msgpack.encode({
+                    address: message.address,
+                    content: msgpack.encode(packedContent)
+                });
+                this._wss.broadcast(envelope);
+            } catch (e) {
+                console.log(chalk.yellow(`OSC source error handling message ${e}`));
+            }
         });
     }
 }
@@ -152,16 +158,21 @@ class BufferedOSCToWSSSource {
         };
         this._intervalId = setInterval(() => { this._flush(); },  interval);
         this._live.on('message', message => {
-            const packedContent = this._packer.pack(message.address, message.args);
-            if (this._bypassAddresses.has(message.address)) {
-                const envelope = msgpack.encode({
-                    address: message.address,
-                    content: msgpack.encode(packedContent)
-                });
-                this._wss.broadcast(envelope);
-            } else {
-                this._queueForAddress(message.address).push(packedContent);
-            }  
+            try {
+                const packedContent = this._packer.pack(message.address, message.args);
+                console.log(chalk.green(`OSC source broadcasting address ${message.address}`));
+                if (this._bypassAddresses.has(message.address)) {
+                    const envelope = msgpack.encode({
+                        address: message.address,
+                        content: msgpack.encode(packedContent)
+                    });
+                    this._wss.broadcast(envelope);
+                } else {
+                    this._queueForAddress(message.address).push(packedContent);
+                }  
+            } catch (e) {
+                console.log(chalk.yellow(`Error handling osc message ${e}`));
+            }
         });
     }
 
