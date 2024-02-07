@@ -8,7 +8,7 @@ const { AggregateException } = require('../utils/utils');
  */
 class MIDIOutputs {
 
-    constructor(names) {
+    constructor(names, strict) {
         if (!names.every(name => typeof name === 'string')) {
             throw new TypeError('All arguments must be strings.');
         }
@@ -32,7 +32,7 @@ class MIDIOutputs {
                 errors.push(error);
             }
         }
-        if (errors.length > 0) {
+        if (strict && errors.length > 0) {
             console.log(`Available MIDI output ports:\n${prettyjson.render(easymidi.getOutputs())}`);
             throw new AggregateException(errors);
         }

@@ -147,7 +147,7 @@ function midiSinkFromConfig(config, wss, strict) {
     let midiSink = null;
 
     try {
-        const outputs = new MIDIOutputs(config.ports);
+        const outputs = new MIDIOutputs(config.ports, strict);
         midiSink = new RawMIDISink(outputs, wss);
     } catch (e) {
         if (strict) {

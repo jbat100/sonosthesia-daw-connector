@@ -6,7 +6,8 @@
     "midiSink" : {
         "ports" : [
             "IAC Driver Bus 1",
-            "IAC Driver Bus 2"
+            "IAC Driver Bus 2",
+            "loopMIDI Port"
         ],
         "logLevel" : 2
     },
