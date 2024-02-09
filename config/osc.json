@@ -5,6 +5,6 @@
     },
     "oscSource" : {
         "port" : 7006,
-        "logLovel" : 2
+        "logLevel" : 2
     }
 }
